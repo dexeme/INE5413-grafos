@@ -27,8 +27,7 @@
 # ...
 
 import sys
-
-
+import manager as m
 class Vertice:
     def __init__(self, rotulo: str):
         self.rotulo = rotulo
@@ -66,8 +65,11 @@ class Grafo:
         vertice = Vertice(rotulo)
         self.vertices[rotulo] = vertice
 
-    def adicionar_aresta(self, u: str, v: str, peso: float):
-        #print("Adicionando aresta entre", u, "e", v, "com peso", peso)
+    def adicionar_aresta(self, parts: list[str], temPeso: bool):
+        u = parts[0]
+        v = parts[1]
+        peso = parts[2] if temPeso else 0
+        
         if u not in self.vertices or v not in self.vertices:
             if u not in self.vertices:
                 print("Vértice", u, "não encontrado.")
@@ -86,39 +88,6 @@ class Grafo:
         self.arestas[(u_vertice, v_vertice)] = peso
         self.arestas[(v_vertice, u_vertice)] = peso
 
-
-
-class Manager:
-    def __init__(self, file):
-        self.file = file
-        self.vertices = []
-        self.edges = []
-        self.graph = Grafo()
-        self.read()
-
-    def read(self):
-        with open(self.file, 'r') as f:
-            lines = f.readlines()
-            # O número de vértices está na primeira linha após a palavra 'vertices'.
-            num_vertices = int(lines[0].strip().split(' ')[1])
-            print("Total de vértices: ", num_vertices)
-
-            # As linhas dos vértices estão imediatamente após '*vertices n'.
-            vertex_lines = lines[1:1 + num_vertices]
-            print("Linhas dos vértices: ", vertex_lines)
-            # As arestas começam após as linhas dos vértices e o marcador '*edges'.
-            edge_lines = lines[2 + num_vertices:]
-
-            for line in vertex_lines:
-                parts = line.strip().split(' ')
-                self.graph.adicionar_vertice(parts[0])
-                print("Adicionando vértice", parts[0])
-            for line in edge_lines:
-                parts = line.strip().split(' ')
-                # Converta o peso para float.
-                self.graph.adicionar_aresta(parts[0], parts[1], float(parts[2]))
-
-
 if __name__ == "__main__":
     filename = sys.argv[1]
-    manager = Manager(filename)
+    manager = m.Manager(file=filename, temPeso=True)
