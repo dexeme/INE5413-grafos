@@ -26,6 +26,9 @@
 # a c valor_do_peso
 # ...
 
+import sys
+
+
 class Vertice:
     def __init__(self, rotulo: str):
         self.rotulo = rotulo
@@ -64,15 +67,18 @@ class Grafo:
         self.vertices[rotulo] = vertice
 
     def adicionar_aresta(self, u: str, v: str, peso: float):
+        #print("Adicionando aresta entre", u, "e", v, "com peso", peso)
         if u not in self.vertices or v not in self.vertices:
-            raise ValueError("Um ou ambos os vértices não existem no grafo.")
+            if u not in self.vertices:
+                print("Vértice", u, "não encontrado.")
+            if v not in self.vertices:
+                print("Vértice", v, "não encontrado.")
         u_vertice = self.vertices[u]
         v_vertice = self.vertices[v]
         
         # Atualize os vizinhos e graus.
         u_vertice.vizinhos.add(v_vertice)
         v_vertice.vizinhos.add(u_vertice)
-        print(u_vertice.vizinhos, v_vertice.vizinhos)
         u_vertice.grau += 1
         v_vertice.grau += 1
 
@@ -100,27 +106,19 @@ class Manager:
             # As linhas dos vértices estão imediatamente após '*vertices n'.
             vertex_lines = lines[1:1 + num_vertices]
             print("Linhas dos vértices: ", vertex_lines)
-
             # As arestas começam após as linhas dos vértices e o marcador '*edges'.
             edge_lines = lines[2 + num_vertices:]
 
             for line in vertex_lines:
                 parts = line.strip().split(' ')
-                self.graph.adicionar_vertice(parts[1])
-
+                self.graph.adicionar_vertice(parts[0])
+                print("Adicionando vértice", parts[0])
             for line in edge_lines:
                 parts = line.strip().split(' ')
                 # Converta o peso para float.
                 self.graph.adicionar_aresta(parts[0], parts[1], float(parts[2]))
-                print(parts[0], parts[1], float(parts[2]))
 
 
 if __name__ == "__main__":
-    manager = Manager('entrada.txt')
-    print("Quantidade de Arestas:", manager.graph.qtdArestas())
-    print("Quantidade de Vértices:", manager.graph.qtdVertices())
-    print("Grau do vértice 1:", manager.graph.grau(manager.graph.vertices['d']))
-    print("Rótulo do vértice 1:", manager.graph.rotulo(manager.graph.vertices['d']))
-    print("Vizinhos do vértice 1:", manager.graph.vizinhos(manager.graph.vertices['a']))
-    print("Há aresta entre 1 e 2:", manager.graph.haAresta(manager.graph.vertices['a'], manager.graph.vertices['b']))
-    print("Peso da aresta entre 1 e 2:", manager.graph.peso(manager.graph.vertices['a'], manager.graph.vertices['b']))
+    filename = sys.argv[1]
+    manager = Manager(filename)
