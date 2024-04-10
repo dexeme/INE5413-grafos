@@ -18,9 +18,36 @@ import sys
 import A1_1 as a1_1
 import manager as m
 
+def buscaLargura(grafo: a1_1.Grafo, s: str):
+    # A configuração de todos os vértices já foi feita no construtor
+
+    # Configurando o vértice de origem
+    try:
+        grafo.vertices[s].visitado = True
+        grafo.vertices[s].distancia = 0
+    except KeyError:
+        print("Vértice inicial não encontrado")
+        return
+    fila = [s] # Fila de vértices visitados, já inclui o vértice de origem
+    nivel_agrupado = {} # Dicionário para agrupar os vértices por nível
+    while fila:
+        u = fila.pop(0)
+        dist = grafo.vertices[u].distancia
+        if dist not in nivel_agrupado:
+            nivel_agrupado[dist] = []
+        nivel_agrupado[dist].append(grafo.vertices[u].rotulo)
+        for v in grafo.vizinhos(grafo.vertices[u]):
+            if not v.visitado:
+                v.visitado = True
+                v.distancia = grafo.vertices[u].distancia + 1
+                v.anterior = u
+                fila.append(v.rotulo)
+
+    for dist in sorted(nivel_agrupado):
+        print(f"{dist}: {', '.join(nivel_agrupado[dist])}")
+    
 if __name__ == "__main__":
     filename = sys.argv[1]
     s = sys.argv[2] # Vértice que vai fazer a busca
     manager = m.Manager(file=filename, temPeso=False) # Não tem peso na busca em largura
-    
-    
+    buscaLargura(grafo=manager.graph, s=s)
