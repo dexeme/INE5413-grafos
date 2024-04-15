@@ -68,7 +68,7 @@ class Grafo:
         vertice = Vertice(rotulo)
         self.vertices[rotulo] = vertice
 
-    def adicionar_aresta(self, parts: list[str], temPeso: bool):
+    def adicionar_aresta(self, parts: list, temPeso: bool):
         u = parts[0]
         v = parts[1]
         peso = parts[2] if temPeso else 0
