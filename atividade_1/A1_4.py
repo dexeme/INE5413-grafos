@@ -56,3 +56,52 @@
 # 11            Av ← u % Define o ancestral do caminho
 # 12 
 # 13 return (D, A)
+
+import sys
+import A1_1 as a1_1
+import manager as m
+from heapq import heappop, heappush
+
+def dijkstra(grafo: a1_1.Grafo, s: int) -> tuple[dict[int, int], dict[int, int]]:
+    D = {v: float("inf") for v in grafo.vertices}
+    A = {v: None for v in grafo.vertices}
+    C = {}
+
+    D[s] = 0
+    A[s] = None
+    restantes = [(D[s], s)]
+
+    while restantes:
+        u_dist, u = heappop(restantes)
+
+        if C.get(u):
+            continue
+        C[u] = True
+
+        for v in grafo.vertices[u].vizinhos:
+            if C.get(v.rotulo):
+                continue
+
+            dist = u_dist + float(grafo.peso(v, grafo.vertices[u]))
+            v = v.rotulo
+            if D[v] > dist:
+                D[v] = dist
+                A[v] = u
+                heappush(restantes, (dist, v))
+    return D, A
+if __name__ == "__main__":
+    filename = sys.argv[1]
+    s = sys.argv[2] # Vértice que vai fazer a busca
+    manager = m.Manager(file=filename, temPeso=True) # No caso do Dijkstra, tem peso (positivos)
+    dijkstra(grafo=manager.graph, s=s)
+    D, A = dijkstra(manager.graph, s)
+    for v in manager.graph.vertices:
+        caminho = [v]
+        if D[v] == float("inf"):
+            continue
+        u = A[v]
+        while u is not None:
+            caminho.append(u)
+            u = A[u]
+        caminho_str = ",".join(str(i) for i in reversed(caminho))
+        print(f"{v}: {caminho_str}; d={int(D[v])}")
