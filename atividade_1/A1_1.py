@@ -71,7 +71,7 @@ class Grafo:
     def adicionar_aresta(self, parts: list, temPeso: bool):
         u = parts[0]
         v = parts[1]
-        peso = parts[2] if temPeso else 0
+        peso = float(parts[2]) if temPeso else 0
         
         if u not in self.vertices or v not in self.vertices:
             if u not in self.vertices:
