@@ -89,9 +89,10 @@ def dijkstra(grafo: a1_1.Grafo, s: int) -> tuple[dict[int, int], dict[int, int]]
                 A[v] = u
                 heappush(restantes, (dist, v))
     return D, A
+
 if __name__ == "__main__":
     filename = sys.argv[1]
-    s = sys.argv[2] # Vértice que vai fazer a busca
+    s = sys.argv[2]
     manager = m.Manager(file=filename, temPeso=True) # No caso do Dijkstra, tem peso (positivos)
     dijkstra(grafo=manager.graph, s=s)
     D, A = dijkstra(manager.graph, s)
