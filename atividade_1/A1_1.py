@@ -34,7 +34,6 @@ class Vertice:
         self.vizinhos = set()
         self.grau = 0
         self.visitado = False
-        self.anterior = None
 
 class Grafo:
     def __init__(self):
