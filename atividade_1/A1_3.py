@@ -42,7 +42,7 @@ def has_eulerian_circuit(grafo: a1_1.Grafo):
 
 def find_eulerian_circuit(grafo: a1_1.Grafo):
     if not has_eulerian_circuit(grafo):
-        return [0]
+        return [], 0
 
     stack = []
     circuit = []
