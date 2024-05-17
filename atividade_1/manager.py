@@ -14,7 +14,6 @@ class Manager:
             lines = f.readlines()
             # O número de vértices está na primeira linha após a palavra 'vertices'.
             num_vertices = int(lines[0].strip().split(' ')[1])
-            print("Total de vértices: ", num_vertices)
 
             # As linhas dos vértices estão imediatamente após '*vertices n'.
             vertex_lines = lines[1:1 + num_vertices]
